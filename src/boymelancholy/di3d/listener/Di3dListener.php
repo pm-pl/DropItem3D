@@ -12,7 +12,6 @@ use boymelancholy\di3d\event\Di3DPickUpItemEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
 use pocketmine\item\Armor;
-use pocketmine\item\VanillaItems;
 
 class Di3dListener implements Listener
 {
@@ -20,25 +19,34 @@ class Di3dListener implements Listener
     {
         $player = $event->getPlayer();
         $item = $event->getItem();
+        $entity = $event->getRealisticDropItem();
 
         $equip = (int) DropItem3D::getInstance()->getConfig()->get(Di3dConstants::CONFIG_ARMOR_EQUIP_INSTANTLY);
 
+        $willClose = false;
         switch (true) {
-            case !$item instanceof Armor:
-            case $equip === Di3dConstants::PUT_AWAY_ARMOR_TO_INVENTORY:
-                if (!$player->getInventory()->canAddItem($item)) return;
-                $player->getInventory()->addItem($item);
+            case $item instanceof Armor && Di3dConstants::PUT_AWAY_ARMOR_TO_EQUIP:
+                if (!$player->getArmorInventory()->getItem($item->getArmorSlot()) instanceof Armor) {
+                    $player->getArmorInventory()->setItem($item->getArmorSlot(), $item);
+                    $willClose = true;
+                } else {
+                    if ($player->getInventory()->canAddItem($item)) {
+                        $player->getInventory()->addItem($item);
+                        $willClose = true;
+                    }
+                }
                 break;
 
-            case $item instanceof Armor && Di3dConstants::PUT_AWAY_ARMOR_TO_EQUIP:
-                if ($player->getArmorInventory()->getChestplate() === VanillaItems::AIR()) {
-                    $player->getArmorInventory()->setItem($item->getArmorSlot(), $item);
-                } else {
-                    if (!$player->getInventory()->canAddItem($item)) return;
+            case !$item instanceof Armor:
+            case $equip === Di3dConstants::PUT_AWAY_ARMOR_TO_INVENTORY:
+                if ($player->getInventory()->canAddItem($item)) {
                     $player->getInventory()->addItem($item);
+                    $willClose = true;
                 }
                 break;
         }
+
+        if ($willClose) $entity->flagForDespawn();
     }
 
     public function onDrop(Di3dDropItemEvent $event)

@@ -65,11 +65,11 @@ class RealisticDropItem extends Living
         $this->getArmorInventory()->setItem($item->getArmorSlot(), $item);
 
         $deltaVector = Vector3::zero();
-        $deltaVector->y -= match ($item->getArmorSlot()) {
-            ArmorInventory::SLOT_HEAD => 1.74,
-            ArmorInventory::SLOT_CHEST => 0.75,
-            ArmorInventory::SLOT_LEGS => 0.3,
-            ArmorInventory::SLOT_FEET => 0.0,
+        $deltaVector->y += match ($item->getArmorSlot()) {
+            ArmorInventory::SLOT_HEAD => -1.7,
+            ArmorInventory::SLOT_CHEST => -0.75,
+            ArmorInventory::SLOT_LEGS => -0.3,
+            ArmorInventory::SLOT_FEET => 0.1,
         };
         $yaw = mt_rand(0, 360);
         $pitch = 0.0;
