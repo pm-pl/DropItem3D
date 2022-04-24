@@ -12,6 +12,7 @@ use boymelancholy\di3d\event\Di3DPickUpItemEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
 use pocketmine\item\Armor;
+use pocketmine\item\Skull;
 
 class Di3dListener implements Listener
 {
@@ -25,7 +26,7 @@ class Di3dListener implements Listener
 
         $willClose = false;
         switch (true) {
-            case $item instanceof Armor && Di3dConstants::PUT_AWAY_ARMOR_TO_EQUIP:
+            case $item instanceof Armor && $equip === Di3dConstants::PUT_AWAY_ARMOR_TO_EQUIP:
                 if (!$player->getArmorInventory()->getItem($item->getArmorSlot()) instanceof Armor) {
                     $player->getArmorInventory()->setItem($item->getArmorSlot(), $item);
                     $willClose = true;
@@ -54,19 +55,26 @@ class Di3dListener implements Listener
         $item = $event->getItem();
         $rdi = $event->getRealisticDropItem();
 
-        $equip = Di3dConstants::DROP_STYLE_ITEM;
-        if ($item instanceof Armor) {
-            $style = (int) DropItem3D::getInstance()->getConfig()->get(Di3dConstants::CONFIG_ARMOR_DROP_STYLE);
-            $equip = $style === Di3dConstants::DROP_STYLE_ARMOR;
-        }
+        $style = (int) DropItem3D::getInstance()->getConfig()->get(Di3dConstants::CONFIG_ARMOR_DROP_STYLE);
+        $isRodShape = in_array($item->getId(), Di3dConstants::ITEM_ROD_SHAPED);
 
-        if ($equip) {
-            /** @var Armor $item */
-            $rdi->setEquitableItem($item);
-            return;
-        }
+        switch (true) {
+            case $item instanceof Armor && $style === Di3dConstants::DROP_STYLE_ARMOR:
+                $rdi->setEquitableItem($item);
+                break;
 
-        $rdi->setHeldItem($item);
+            case $item instanceof Skull && $style === Di3dConstants::DROP_STYLE_ARMOR:
+                $rdi->setSkullItem($item);
+                break;
+
+            case $isRodShape:
+                $rdi->setRodShapeItem($item);
+                break;
+
+            case $style === Di3dConstants::DROP_STYLE_ITEM:
+                $rdi->setHeldItem($item);
+                break;
+        }
     }
 
     public function onChoking(EntityDamageEvent $event)
