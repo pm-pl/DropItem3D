@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace boymelancholy\di3d;
 
 use boymelancholy\di3d\entity\object\RealisticDropItem;
+use boymelancholy\di3d\listener\drop\DropItemListener;
+use boymelancholy\di3d\listener\pickup\InteractPickUpListener;
+use boymelancholy\di3d\listener\pickup\LikeVanillaPickUpListener;
 use pocketmine\data\bedrock\EntityLegacyIds;
 use pocketmine\entity\EntityDataHelper;
 use pocketmine\entity\EntityFactory;
@@ -35,8 +38,15 @@ class DropItem3D extends PluginBase
     private function registerListener()
     {
         $listeners = [];
+        $listeners[] = new DropItemListener();
+        $listeners[] = match ((int) $this->getConfig()->get(Di3dConstants::CONFIG_DROP_ITEM_PICKUP)) {
+            Di3dConstants::PICK_UP_LIKE_VANILLA => new LikeVanillaPickUpListener(),
+            Di3dConstants::PICK_UP_BY_INTERACT => new InteractPickUpListener(),
+            default => null
+        };
+
         foreach ($listeners as $listener) {
-            $this->getServer()->getPluginManager()->registerEvents($listener, $this);
+            if ($listener !== null) $this->getServer()->getPluginManager()->registerEvents($listener, $this);
         }
     }
 
@@ -55,8 +65,8 @@ class DropItem3D extends PluginBase
     private function registerConfig()
     {
         @mkdir($this->getDataFolder());
-        $this->saveResource('config.yml');
-        $this->config = new Config($this->getDataFolder() . 'config.yml', Config::YAML);
+        $this->saveResource("config.yml");
+        $this->config = new Config($this->getDataFolder() . "config.yml", Config::YAML);
     }
 
 
