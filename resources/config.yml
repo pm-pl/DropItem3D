@@ -1,0 +1,20 @@
+# How to pick up drop item.
+## 0 : Like vanilla. (If you approach to item, you can pick up it)
+## 1 : Click then pick up. (PC: Right click, Mobile: Tap)
+drop-item-pickup: 0
+
+# Drop armor item style.
+## 0 : Like be equipping it.
+## 1 : Like an item.
+armor-drop-style: 0
+
+# If you pick up an armor, what if it does?
+## 0 : Equip it instantly.
+## 1 : Add it to inventory.
+armor-equip-instantly: 0
+
+# Prerequisite is "armor-equip-instantly: 0".
+# When new one is better than old one, whether exchange new armor and old armor.
+## 0 : Yes
+## 1 : No
+armor-exchange-equip: 0
