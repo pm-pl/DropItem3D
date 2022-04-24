@@ -4,7 +4,7 @@
 ![PocketMine API](https://img.shields.io/badge/PMMP%20API-v4.0.0-orange?style=flat-square)  
 ![GitHub last commit](https://img.shields.io/github/last-commit/boymelancholy/DropItem3D?color=purple&style=flat-square)
 ![overview](assets/di3d_overview.png)  
-<span style="font-size:18px">PocketMine-MP plugin to be able to see drop items realistic.</span>  
+<span style="font-size:17px">PocketMine-MP plugin to be able to see drop items realistic.</span>  
 　
 
 ## Configuration
@@ -23,4 +23,15 @@ armor-drop-style: 0
 ## 0 : Equip it instantly.
 ## 1 : Add it to inventory.
 armor-equip-instantly: 0
-```
+```  
+　  
+## Demo view
+<img src="assets/pickup_like_vanilla.gif" width="395" height="200" alt="" />
+<img src="assets/pickup_click.gif" width="395" height="200" alt="" />  
+
+First demo = `drop-item-pickup: 0`  
+Last demo = `drop-item-pickup: 1`
+  
+　  
+## Todo
+- [ ] To be able to retrieve the exact coordinates by click.
