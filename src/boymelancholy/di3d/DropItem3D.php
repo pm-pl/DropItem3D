@@ -7,6 +7,7 @@ namespace boymelancholy\di3d;
 use boymelancholy\di3d\entity\object\RealisticDropItem;
 use boymelancholy\di3d\listener\Di3dListener;
 use boymelancholy\di3d\listener\drop\DropItemListener;
+use boymelancholy\di3d\listener\ObjectVisiblityListener;
 use boymelancholy\di3d\listener\pickup\InteractPickUpListener;
 use boymelancholy\di3d\listener\pickup\LikeVanillaPickUpListener;
 use pocketmine\data\bedrock\EntityLegacyIds;
@@ -39,6 +40,7 @@ class DropItem3D extends PluginBase
     private function registerListener()
     {
         $listeners = [];
+        $listeners[] = new ObjectVisiblityListener();
         $listeners[] = new DropItemListener();
         $listeners[] = match ((int) $this->getConfig()->get(Di3dConstants::CONFIG_DROP_ITEM_PICKUP)) {
             Di3dConstants::PICK_UP_LIKE_VANILLA => new LikeVanillaPickUpListener(),
@@ -71,7 +73,6 @@ class DropItem3D extends PluginBase
         }
         $this->config = new Config($this->getDataFolder() . "config.yml", Config::YAML);
     }
-
 
     private static self $instance;
 
