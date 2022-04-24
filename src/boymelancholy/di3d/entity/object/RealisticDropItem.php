@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace boymelancholy\di3d\entity\object;
 
+use boymelancholy\di3d\Di3dConstants;
 use pocketmine\entity\EntitySizeInfo;
 use pocketmine\entity\Living;
-use pocketmine\entity\Location;
 use pocketmine\inventory\ArmorInventory;
 use pocketmine\item\Armor;
 use pocketmine\item\Item;
 use pocketmine\item\Skull;
 use pocketmine\math\Vector3;
+use pocketmine\nbt\NbtDataException;
+use pocketmine\nbt\NoSuchTagException;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\mcpe\convert\TypeConverter;
 use pocketmine\network\mcpe\protocol\MobEquipmentPacket;
@@ -46,6 +48,25 @@ class RealisticDropItem extends Living
         $this->setHasGravity(false);
         $this->setInvisible();
         $this->setImmobile();
+
+        try {
+            $jsonData = $nbt->getString(Di3dConstants::TAG_EQUIPPING_ITEM);
+            $this->item = Item::jsonDeserialize(json_decode($jsonData, flags: JSON_OBJECT_AS_ARRAY));
+        } catch (NoSuchTagException|NbtDataException $e) {
+            $this->item = null;
+        }
+    }
+
+    public function saveNBT() : CompoundTag
+    {
+        $nbt = parent::saveNBT();
+        if ($this->item === null) {
+            return $nbt;
+        }
+
+        $jsonData = json_encode($this->item->jsonSerialize());
+        $nbt->setString(Di3dConstants::TAG_EQUIPPING_ITEM, $jsonData);
+        return $nbt;
     }
 
     /**
@@ -76,6 +97,7 @@ class RealisticDropItem extends Living
         $yaw = mt_rand(0, 360);
         $pitch = 0.0;
         $this->teleport($this->getLocation()->addVector($deltaVector), $yaw, $pitch);
+        $this->saveNBT();
     }
 
     /**
@@ -92,58 +114,58 @@ class RealisticDropItem extends Living
         $yaw = mt_rand(0, 360);
         $pitch = 0.0;
         $this->teleport($this->getLocation()->addVector($deltaVector), $yaw, $pitch);
+        $this->saveNBT();
     }
 
     /**
      * Make object have the item.
      * @param Item $item
+     * @param bool $load
      */
-    public function setHeldItem(Item $item)
+    public function setHeldItem(Item $item, bool $load = false)
     {
         $this->item = $item;
-        $this->equipItem($item);
+        $deltaVector = Vector3::zero();
+        $deltaVector->y -= $load ? 0 : 0.65;
+        $yaw = mt_rand(0, 360);
+        $pitch = 0.0;
+        $this->teleport($this->getLocation()->addVector($deltaVector), $yaw, $pitch);
+
+        $this->sendMobEquipPacket();
+        $this->saveNBT();
     }
 
     /**
      * Make object have the item whose shape is rod.
      * @param Item $item
+     * @param bool $load
      */
-    public function setRodShapeItem(Item $item)
+    public function setRodShapeItem(Item $item, bool $load = false)
     {
         $this->item = $item;
-        $this->equipItem($item, true);
+
+        $this->getNetworkProperties()->setInt(EntityMetadataProperties::ARMOR_STAND_POSE_INDEX, 8);
+
+        $deltaVector = Vector3::zero();
+        $deltaVector->y -= $load ? 0 : 1.35;
+        $yaw = mt_rand(0, 360);
+        $pitch = 0.0;
+        $this->teleport($this->getLocation()->addVector($deltaVector), $yaw, $pitch);
+
+        $this->sendMobEquipPacket();
+        $this->saveNBT();
     }
 
-    /**
-     * Equip item
-     * @param Item $item
-     * @param bool $rodShape
-     */
-    private function equipItem(Item $item, bool $rodShape = false)
+    private function sendMobEquipPacket()
     {
-        $prevRdi = &$this;
-        $delta = $rodShape ? -1.35 : -0.65;
-        $v = $prevRdi->getLocation()->asVector3();
-        $location = new Location($v->x, $v->y + $delta, $v->z, $prevRdi->getWorld(), mt_rand(0, 360), 0.0);
-
-        $rdi = new self($location);
-        $rdi->spawnToAll();
-        $rdi->item = $item;
-        if ($rodShape) {
-            $rdi->getNetworkProperties()->setInt(EntityMetadataProperties::ARMOR_STAND_POSE_INDEX, 8);
-        }
-
         $pk = new MobEquipmentPacket();
-        $pk->actorRuntimeId = $rdi->getId();
-        $pk->item = ItemStackWrapper::legacy(TypeConverter::getInstance()->coreItemStackToNet($item));
+        $pk->actorRuntimeId = $this->getId();
+        $pk->item = ItemStackWrapper::legacy(TypeConverter::getInstance()->coreItemStackToNet($this->item));
         $pk->hotbarSlot = 0;
         $pk->inventorySlot = 0;
 
-        foreach ($rdi->getWorld()->getPlayers() as $player) {
+        foreach ($this->getWorld()->getPlayers() as $player) {
             $player->getNetworkSession()->sendDataPacket($pk);
         }
-
-        $prevRdi->flagForDespawn();
-        $prevRdi = null;
     }
 }

@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace boymelancholy\di3d\listener;
 
 use boymelancholy\di3d\Di3dConstants;
+use boymelancholy\di3d\DropItem3D;
 use boymelancholy\di3d\entity\object\RealisticDropItem;
 use pocketmine\event\entity\EntityTeleportEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\item\TieredTool;
+use pocketmine\scheduler\ClosureTask;
 use pocketmine\world\World;
 
 class ObjectVisibilityListener implements Listener
@@ -20,7 +22,13 @@ class ObjectVisibilityListener implements Listener
      */
     public function onJoin(PlayerJoinEvent $event)
     {
-        $this->loadRealisticDropItems($event->getPlayer()->getWorld());
+        $world = $event->getPlayer()->getWorld();
+        DropItem3D::getInstance()->getScheduler()->scheduleDelayedTask(
+            new ClosureTask(function () use($world) {
+                $this->loadRealisticDropItems($world);
+            }),
+            20
+        );
     }
 
     /**
@@ -29,7 +37,16 @@ class ObjectVisibilityListener implements Listener
      */
     public function onTeleport(EntityTeleportEvent $event)
     {
-        $this->loadRealisticDropItems($event->getEntity()->getWorld());
+        $from = $event->getFrom();
+        $to = $event->getTo();
+        if ($from->getWorld() === $to->getWorld()) return;
+        $world = $to->getWorld();
+        DropItem3D::getInstance()->getScheduler()->scheduleDelayedTask(
+            new ClosureTask(function () use($world) {
+                $this->loadRealisticDropItems($world);
+            }),
+            20
+        );
     }
 
     /**
@@ -39,15 +56,20 @@ class ObjectVisibilityListener implements Listener
     private function loadRealisticDropItems(World $world)
     {
         /** @var array<RealisticDropItem> $allRdi */
-        $allRdi = array_filter($world->getEntities(), function ($e) { return $e instanceof RealisticDropItem; });
+        $allRdi = [];
+        foreach ($world->getEntities() as $entity) {
+            if ($entity instanceof RealisticDropItem) {
+                $allRdi[] = $entity;
+            }
+        }
         foreach ($allRdi as $rdi) {
-            if (empty($rdi->getArmorInventory()->getContents())) {
-                $item = $rdi->getItem();
+            $item = $rdi->getItem();
+            if (!in_array($item, $rdi->getArmorInventory()->getContents())) {
                 $isRodShape = in_array($item->getId(), Di3dConstants::ITEM_ROD_SHAPED);
                 if ($isRodShape || $item instanceof TieredTool) {
-                    $rdi->setRodShapeItem($item);
+                    $rdi->setRodShapeItem($item, true);
                 } else {
-                    $rdi->setHeldItem($item);
+                    $rdi->setHeldItem($item, true);
                 }
             }
         }

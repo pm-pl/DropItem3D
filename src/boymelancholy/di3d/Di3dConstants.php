@@ -21,7 +21,7 @@ class Di3dConstants
     const PUT_AWAY_ARMOR_TO_EQUIP = 0;
     const PUT_AWAY_ARMOR_TO_INVENTORY = 1;
 
-
+    const TAG_EQUIPPING_ITEM = "di3d_equipping_item";
     const ITEM_ROD_SHAPED = [
         ItemIds::STICK,
         ItemIds::BONE,
