@@ -6,7 +6,6 @@ namespace boymelancholy\di3d\event;
 
 use boymelancholy\di3d\entity\object\RealisticDropItem;
 use pocketmine\event\player\PlayerEvent;
-use pocketmine\item\Armor;
 use pocketmine\item\Item;
 use pocketmine\player\Player;
 
