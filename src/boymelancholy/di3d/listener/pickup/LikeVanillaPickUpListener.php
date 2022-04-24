@@ -23,6 +23,11 @@ class LikeVanillaPickUpListener implements Listener
         if (!$nearestRealisticDropItem instanceof RealisticDropItem) return;
         $item = $nearestRealisticDropItem->getItem();
 
+        if ($item === null) {
+            $nearestRealisticDropItem->flagForDespawn();
+            return;
+        }
+
         (new Di3DPickUpItemEvent($player, $item, $nearestRealisticDropItem))->call();
     }
 }

@@ -19,6 +19,11 @@ class InteractPickUpListener implements Listener
 
         $item = $entity->getItem();
 
+        if ($item === null) {
+            $entity->flagForDespawn();
+            return;
+        }
+
         (new Di3DPickUpItemEvent($player, $item, $entity))->call();
     }
 }
