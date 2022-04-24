@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace boymelancholy\di3d\event;
 
 use boymelancholy\di3d\entity\object\RealisticDropItem;
-use pocketmine\event\player\PlayerEvent;
+use pocketmine\event\Event;
 use pocketmine\item\Item;
-use pocketmine\player\Player;
 
-class Di3dDropItemEvent extends PlayerEvent
+class Di3dDropItemEvent extends Event
 {
     /** @var Item */
     private Item $item;
@@ -17,9 +16,8 @@ class Di3dDropItemEvent extends PlayerEvent
     /** @var RealisticDropItem */
     private RealisticDropItem $realisticDropItem;
 
-    public function __construct(Player $player, Item $item, RealisticDropItem $realisticDropItem)
+    public function __construct(Item $item, RealisticDropItem $realisticDropItem)
     {
-        $this->player = $player;
         $this->item = $item;
         $this->realisticDropItem = $realisticDropItem;
     }

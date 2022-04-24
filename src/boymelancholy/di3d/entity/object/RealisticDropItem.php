@@ -66,10 +66,10 @@ class RealisticDropItem extends Living
 
         $deltaVector = Vector3::zero();
         $deltaVector->y -= match ($item->getArmorSlot()) {
-            ArmorInventory::SLOT_HEAD => 1.25,
+            ArmorInventory::SLOT_HEAD => 1.74,
             ArmorInventory::SLOT_CHEST => 0.75,
-            ArmorInventory::SLOT_LEGS => 0.35,
-            ArmorInventory::SLOT_FEET => 0.1,
+            ArmorInventory::SLOT_LEGS => 0.3,
+            ArmorInventory::SLOT_FEET => 0.0,
         };
         $yaw = mt_rand(0, 360);
         $pitch = 0.0;
@@ -97,7 +97,7 @@ class RealisticDropItem extends Living
         }
 
         $deltaVector = Vector3::zero();
-        $deltaVector->y -= ($this->getEyeHeight() - 0.25);
+        $deltaVector->y -= 0.75;
         $yaw = mt_rand(0, 360);
         $pitch = 0.0;
         $this->teleport($this->getLocation()->addVector($deltaVector), $yaw, $pitch);
