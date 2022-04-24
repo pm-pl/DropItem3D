@@ -156,6 +156,9 @@ class RealisticDropItem extends Living
         $this->saveNBT();
     }
 
+    /**
+     * Send MobEquipmentPacket
+     */
     private function sendMobEquipPacket()
     {
         $pk = new MobEquipmentPacket();

@@ -74,8 +74,13 @@ class DropItem3D extends PluginBase
         $this->config = new Config($this->getDataFolder() . "config.yml", Config::YAML);
     }
 
+    /** @var self */
     private static self $instance;
 
+    /**
+     * DropItem3D instance (PluginBase)
+     * @return self
+     */
     public static function getInstance() : self
     {
         return self::$instance;
