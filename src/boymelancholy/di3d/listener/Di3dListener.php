@@ -10,6 +10,7 @@ use boymelancholy\di3d\entity\object\RealisticDropItem;
 use boymelancholy\di3d\event\Di3dDropItemEvent;
 use boymelancholy\di3d\event\Di3DPickUpItemEvent;
 use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\event\entity\EntityItemPickupEvent;
 use pocketmine\event\Listener;
 use pocketmine\item\Armor;
 use pocketmine\item\Skull;
@@ -51,6 +52,11 @@ class Di3dListener implements Listener
 
         if ($willClose) {
             $player->getWorld()->addSound($player->getPosition(), new PopSound());
+            $ev = new EntityItemPickupEvent($player, $entity, $item, $player->getInventory());
+            if($player->hasFiniteResources() && $player->getInventory() === null){
+                $ev->cancel();
+            }
+            $ev->call();
             $entity->flagForDespawn();
         }
     }
