@@ -29,6 +29,7 @@ class Di3dConstants
         ItemIds::BAMBOO,
         ItemIds::BOW,
         ItemIds::FISHING_ROD,
+        ItemIds::BLAZE_ROD,
         625, // Spyglass
     ];
 }
