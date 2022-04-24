@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace boymelancholy\di3d;
 
+use pocketmine\item\ItemIds;
+
 class Di3dConstants
 {
     const CONFIG_DROP_ITEM_PICKUP = "drop-item-pickup";
@@ -18,4 +20,15 @@ class Di3dConstants
 
     const PUT_AWAY_ARMOR_TO_EQUIP = 0;
     const PUT_AWAY_ARMOR_TO_INVENTORY = 1;
+
+
+    const ITEM_ROD_SHAPED = [
+        ItemIds::STICK,
+        ItemIds::BONE,
+        ItemIds::TRIDENT,
+        ItemIds::BAMBOO,
+        ItemIds::BOW,
+        ItemIds::FISHING_ROD,
+        625, // Spyglass
+    ];
 }
