@@ -13,6 +13,7 @@ use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
 use pocketmine\item\Armor;
 use pocketmine\item\Skull;
+use pocketmine\item\TieredTool;
 
 class Di3dListener implements Listener
 {
@@ -61,29 +62,28 @@ class Di3dListener implements Listener
         switch (true) {
             case $item instanceof Armor && $style === Di3dConstants::DROP_STYLE_ARMOR:
                 $rdi->setEquitableItem($item);
-                break;
+                return;
 
             case $item instanceof Skull && $style === Di3dConstants::DROP_STYLE_ARMOR:
                 $rdi->setSkullItem($item);
-                break;
+                return;
 
-            case $isRodShape:
+            case $isRodShape || $item instanceof TieredTool:
                 $rdi->setRodShapeItem($item);
-                break;
+                return;
 
             case $style === Di3dConstants::DROP_STYLE_ITEM:
                 $rdi->setHeldItem($item);
-                break;
+                return;
         }
+
+        $rdi->setHeldItem($item);
     }
 
-    public function onChoking(EntityDamageEvent $event)
+    public function onDamage(EntityDamageEvent $event)
     {
         $entity = $event->getEntity();
         if (!$entity instanceof RealisticDropItem) return;
-
-        if ($event->getCause() === $event::CAUSE_SUFFOCATION) {
-            $event->cancel();
-        }
+        $event->cancel();
     }
 }
