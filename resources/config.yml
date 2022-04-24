@@ -12,9 +12,3 @@ armor-drop-style: 0
 ## 0 : Equip it instantly.
 ## 1 : Add it to inventory.
 armor-equip-instantly: 0
-
-# Prerequisite is "armor-equip-instantly: 0".
-# When new one is better than old one, whether exchange new armor and old armor.
-## 0 : Yes
-## 1 : No
-armor-exchange-equip: 0
