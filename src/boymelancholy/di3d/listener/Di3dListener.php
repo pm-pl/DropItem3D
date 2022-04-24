@@ -6,8 +6,10 @@ namespace boymelancholy\di3d\listener;
 
 use boymelancholy\di3d\Di3dConstants;
 use boymelancholy\di3d\DropItem3D;
+use boymelancholy\di3d\entity\object\RealisticDropItem;
 use boymelancholy\di3d\event\Di3dDropItemEvent;
 use boymelancholy\di3d\event\Di3DPickUpItemEvent;
+use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
 use pocketmine\item\Armor;
 use pocketmine\item\VanillaItems;
@@ -52,10 +54,20 @@ class Di3dListener implements Listener
 
         if ($equip) {
             /** @var Armor $item */
-            $rdi->setEquippableItem($item);
+            $rdi->setEquitableItem($item);
             return;
         }
 
         $rdi->setHeldItem($item);
+    }
+
+    public function onChoking(EntityDamageEvent $event)
+    {
+        $entity = $event->getEntity();
+        if (!$entity instanceof RealisticDropItem) return;
+
+        if ($event->getCause() === $event::CAUSE_SUFFOCATION) {
+            $event->cancel();
+        }
     }
 }

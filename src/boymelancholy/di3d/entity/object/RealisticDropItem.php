@@ -59,7 +59,7 @@ class RealisticDropItem extends Living
      * Make object have the armor.
      * @param Armor $item
      */
-    public function setEquippableItem(Armor $item)
+    public function setEquitableItem(Armor $item)
     {
         $this->item = $item;
         $this->getArmorInventory()->setItem($item->getArmorSlot(), $item);
