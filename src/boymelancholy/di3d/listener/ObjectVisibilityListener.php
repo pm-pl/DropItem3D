@@ -64,6 +64,10 @@ class ObjectVisibilityListener implements Listener
         }
         foreach ($allRdi as $rdi) {
             $item = $rdi->getItem();
+            if ($item === null) {
+                $rdi->flagForDespawn();
+                continue;
+            }
             if (!in_array($item, $rdi->getArmorInventory()->getContents())) {
                 $isRodShape = in_array($item->getId(), Di3dConstants::ITEM_ROD_SHAPED);
                 if ($isRodShape || $item instanceof TieredTool) {
