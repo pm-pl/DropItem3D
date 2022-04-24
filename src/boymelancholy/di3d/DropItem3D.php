@@ -47,7 +47,7 @@ class DropItem3D extends PluginBase
         $listeners[] = new Di3dListener();
 
         foreach ($listeners as $listener) {
-            if ($listener !== null) $this->getServer()->getPluginManager()->registerEvents($listener, $this);
+            $this->getServer()->getPluginManager()->registerEvents($listener, $this);
         }
     }
 
