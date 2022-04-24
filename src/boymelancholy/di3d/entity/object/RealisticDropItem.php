@@ -9,6 +9,7 @@ use pocketmine\entity\Living;
 use pocketmine\inventory\ArmorInventory;
 use pocketmine\item\Armor;
 use pocketmine\item\Item;
+use pocketmine\item\Skull;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\mcpe\convert\TypeConverter;
@@ -85,8 +86,63 @@ class RealisticDropItem extends Living
     public function setHeldItem(Item $item)
     {
         $this->item = $item;
+
+        $this->sendEquipPacket($item);
+
+        $deltaVector = Vector3::zero();
+        $deltaVector->y -= 0.71;
+        $yaw = mt_rand(0, 360);
+        $pitch = 0.0;
+        $this->teleport($this->getLocation()->addVector($deltaVector), $yaw, $pitch);
+
+        $this->scheduleUpdate();
+    }
+
+    /**
+     * Make object have the skull item.
+     * @param Skull $item
+     */
+    public function setSkullItem(Skull $item)
+    {
+        $this->item = $item;
+
+        $this->getArmorInventory()->setItem(ArmorInventory::SLOT_HEAD, $item);
+
+        $deltaVector = Vector3::zero();
+        $deltaVector->y -= 1.7;
+        $yaw = mt_rand(0, 360);
+        $pitch = 0.0;
+        $this->teleport($this->getLocation()->addVector($deltaVector), $yaw, $pitch);
+
+        $this->scheduleUpdate();
+    }
+
+    /**
+     * Make object have the item whose shape is rod.
+     * @param Item $item
+     */
+    public function setRodShapeItem(Item $item)
+    {
+        $this->item = $item;
         $this->getNetworkProperties()->setInt(EntityMetadataProperties::ARMOR_STAND_POSE_INDEX, 8);
 
+        $this->sendEquipPacket($item);
+
+        $deltaVector = Vector3::zero();
+        $deltaVector->y -= 0.71;
+        $yaw = mt_rand(0, 360);
+        $pitch = 0.0;
+        $this->teleport($this->getLocation()->addVector($deltaVector), $yaw, $pitch);
+
+        $this->scheduleUpdate();
+    }
+
+    /**
+     * Send MobEquipmentPacket
+     * @param Item $item
+     */
+    private function sendEquipPacket(Item $item)
+    {
         $pk = new MobEquipmentPacket();
         $pk->actorRuntimeId = $this->getId();
         $pk->item = ItemStackWrapper::legacy(TypeConverter::getInstance()->coreItemStackToNet($item));
@@ -95,15 +151,5 @@ class RealisticDropItem extends Living
         foreach ($this->getWorld()->getPlayers() as $player) {
             $player->getNetworkSession()->sendDataPacket($pk);
         }
-
-        $deltaVector = Vector3::zero();
-        $deltaVector->y -= 0.75;
-        $yaw = mt_rand(0, 360);
-        $pitch = 0.0;
-        $this->teleport($this->getLocation()->addVector($deltaVector), $yaw, $pitch);
-
-        $this->scheduleUpdate();
     }
-
-
 }
