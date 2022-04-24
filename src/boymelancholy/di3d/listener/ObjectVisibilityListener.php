@@ -12,7 +12,7 @@ use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\item\TieredTool;
 use pocketmine\world\World;
 
-class ObjectVisiblityListener implements Listener
+class ObjectVisibilityListener implements Listener
 {
     /**
      * @param PlayerJoinEvent $event
