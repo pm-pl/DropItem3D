@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace boymelancholy\di3d;
 
 use boymelancholy\di3d\entity\object\RealisticDropItem;
+use boymelancholy\di3d\listener\Di3dListener;
 use boymelancholy\di3d\listener\drop\DropItemListener;
 use boymelancholy\di3d\listener\pickup\InteractPickUpListener;
 use boymelancholy\di3d\listener\pickup\LikeVanillaPickUpListener;
@@ -41,9 +42,9 @@ class DropItem3D extends PluginBase
         $listeners[] = new DropItemListener();
         $listeners[] = match ((int) $this->getConfig()->get(Di3dConstants::CONFIG_DROP_ITEM_PICKUP)) {
             Di3dConstants::PICK_UP_LIKE_VANILLA => new LikeVanillaPickUpListener(),
-            Di3dConstants::PICK_UP_BY_INTERACT => new InteractPickUpListener(),
-            default => null
+            Di3dConstants::PICK_UP_BY_INTERACT => new InteractPickUpListener()
         };
+        $listeners[] = new Di3dListener();
 
         foreach ($listeners as $listener) {
             if ($listener !== null) $this->getServer()->getPluginManager()->registerEvents($listener, $this);
