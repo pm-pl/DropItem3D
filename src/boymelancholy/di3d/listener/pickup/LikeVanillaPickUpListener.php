@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace boymelancholy\di3d\listener\pickup;
 
 use boymelancholy\di3d\entity\object\RealisticDropItem;
+use boymelancholy\di3d\event\Di3DPickUpItemEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerMoveEvent;
 
@@ -22,8 +23,8 @@ class LikeVanillaPickUpListener implements Listener
         if (!$nearestRealisticDropItem instanceof RealisticDropItem) return;
         $item = $nearestRealisticDropItem->getItem();
 
-        if (!$player->getInventory()->canAddItem($item)) return;
-        $player->getInventory()->addItem($item);
+        (new Di3DPickUpItemEvent($player, $item))->call();
+
         $nearestRealisticDropItem->flagForDespawn();
     }
 }
