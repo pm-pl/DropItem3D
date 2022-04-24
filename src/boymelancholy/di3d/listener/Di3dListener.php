@@ -14,6 +14,7 @@ use pocketmine\event\Listener;
 use pocketmine\item\Armor;
 use pocketmine\item\Skull;
 use pocketmine\item\TieredTool;
+use pocketmine\world\sound\PopSound;
 
 class Di3dListener implements Listener
 {
@@ -48,7 +49,10 @@ class Di3dListener implements Listener
                 break;
         }
 
-        if ($willClose) $entity->flagForDespawn();
+        if ($willClose) {
+            $player->getWorld()->addSound($player->getPosition(), new PopSound());
+            $entity->flagForDespawn();
+        }
     }
 
     public function onDrop(Di3dDropItemEvent $event)
