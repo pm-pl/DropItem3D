@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace boymelancholy\di3d\listener;
+namespace boymelancholy\di3d\listener\pickup;
 
 use boymelancholy\di3d\entity\object\RealisticDropItem;
 use pocketmine\event\Listener;
