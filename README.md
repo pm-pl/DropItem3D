@@ -23,13 +23,7 @@ armor-drop-style: 0
 ## 0 : Equip it instantly.
 ## 1 : Add it to inventory.
 armor-equip-instantly: 0
-```  
-　  
-## Demo view
-<img src="https://i.imgur.com/NE9s6gw.gif" width="395" height="200" alt="" /> <img src="https://i.imgur.com/RVr89uN.gif" width="395" height="200" alt="" />  
-
-First demo = `drop-item-pickup: 0`  
-Last demo = `drop-item-pickup: 1`
+```
   
 　  
 ## Todo
