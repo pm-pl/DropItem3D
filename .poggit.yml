@@ -5,4 +5,5 @@ branches:
 projects:
   DropItem3D:
     path: ""
+    icon: assets/icon.png
 ...
