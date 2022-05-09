@@ -81,10 +81,7 @@ class DropItem3D extends PluginBase
 
     private function registerConfig()
     {
-        if (!file_exists($this->getDataFolder() . "config.yml")) {
-            @mkdir($this->getDataFolder());
-            $this->saveResource("config.yml");
-        }
+        $this->saveResource("config.yml");
         $this->config = new Config($this->getDataFolder() . "config.yml", Config::YAML);
     }
 
