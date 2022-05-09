@@ -29,26 +29,16 @@ use pocketmine\entity\EntityDataHelper;
 use pocketmine\entity\EntityFactory;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\plugin\PluginBase;
-use pocketmine\utils\Config;
 use pocketmine\world\World;
 
 class DropItem3D extends PluginBase
 {
-    /** @var Config */
-    private Config $config;
-
     public function onEnable() : void
     {
         self::$instance = $this;
 
-        $this->registerConfig();
         $this->registerObject();
         $this->registerListener();
-    }
-
-    public function getConfig() : Config
-    {
-        return $this->config;
     }
 
     private function registerListener()
@@ -77,12 +67,6 @@ class DropItem3D extends PluginBase
             ["RealisticDropItem", "minecraft:armor_stand"],
             EntityLegacyIds::ARMOR_STAND
         );
-    }
-
-    private function registerConfig()
-    {
-        $this->saveResource("config.yml");
-        $this->config = new Config($this->getDataFolder() . "config.yml", Config::YAML);
     }
 
     /** @var self */
