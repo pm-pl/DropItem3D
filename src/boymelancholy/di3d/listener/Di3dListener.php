@@ -22,7 +22,7 @@ use boymelancholy\di3d\Di3dConstants;
 use boymelancholy\di3d\DropItem3D;
 use boymelancholy\di3d\entity\object\RealisticDropItem;
 use boymelancholy\di3d\event\Di3dDropItemEvent;
-use boymelancholy\di3d\event\Di3DPickUpItemEvent;
+use boymelancholy\di3d\event\Di3dPickUpItemEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityItemPickupEvent;
 use pocketmine\event\Listener;
@@ -33,7 +33,7 @@ use pocketmine\world\sound\PopSound;
 
 class Di3dListener implements Listener
 {
-    public function onPickUp(Di3DPickUpItemEvent $event)
+    public function onPickUp(Di3dPickUpItemEvent $event)
     {
         $player = $event->getPlayer();
         $item = $event->getItem();

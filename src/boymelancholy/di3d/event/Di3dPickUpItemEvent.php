@@ -23,7 +23,7 @@ use pocketmine\event\player\PlayerEvent;
 use pocketmine\item\Item;
 use pocketmine\player\Player;
 
-class Di3DPickUpItemEvent extends PlayerEvent
+class Di3dPickUpItemEvent extends PlayerEvent
 {
     /** @var Item */
     private Item $item;
