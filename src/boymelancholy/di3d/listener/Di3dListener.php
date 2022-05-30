@@ -108,6 +108,17 @@ class Di3dListener implements Listener
     {
         $entity = $event->getEntity();
         if (!$entity instanceof RealisticDropItem) return;
-        $event->cancel();
+        $cause = $event->getCause();
+        $killable = [
+            $event::CAUSE_FIRE,
+            $event::CAUSE_FIRE_TICK,
+            $event::CAUSE_LAVA,
+            $event::CAUSE_VOID
+        ];
+        if (!in_array($cause, $killable)) {
+            $event->cancel();
+            return;
+        }
+        $entity->flagForDespawn();
     }
 }
