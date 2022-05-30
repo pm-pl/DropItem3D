@@ -27,6 +27,11 @@ armor-drop-style: 0
 ## 0 : Equip it instantly.
 ## 1 : Add it to inventory.
 armor-equip-instantly: 0
+
+# If you have any items not want to convert 3D object, add it.
+# Only ID or "ID:META" notation is supported.
+# If you write in "ID:META" format, do not forget the double quotation marks, like "35:14".
+item-id-black-list: []
 ```
   
 　  
