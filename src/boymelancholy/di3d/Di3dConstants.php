@@ -25,6 +25,7 @@ class Di3dConstants
     const CONFIG_DROP_ITEM_PICKUP = "drop-item-pickup";
     const CONFIG_ARMOR_DROP_STYLE = "armor-drop-style";
     const CONFIG_ARMOR_EQUIP_INSTANTLY = "armor-equip-instantly";
+    const CONFIG_ITEM_ID_BLACK_LIST = "item-id-black-list";
 
     const PICK_UP_LIKE_VANILLA = 0;
     const PICK_UP_BY_INTERACT = 1;

@@ -1,6 +1,6 @@
 name: DropItem3D
 main: boymelancholy\di3d\DropItem3D
 api: 4.0.0
-version: 1.0.1
+version: 1.1.1
 load: POSTWORLD
 author: boymelancholy
