@@ -47,4 +47,18 @@ class Di3dConstants
         ItemIds::BLAZE_ROD,
         625, // Spyglass
     ];
+
+    const NETHERITE_ITEM_ID = [
+        742, // Ingot
+        743, // Sword
+        744, // Shovel
+        745, // Pickaxe
+        746, // Axe
+        747, // Hoe
+        748, // Helmet
+        749, // Chestplate
+        750, // Leggings
+        751, // Boots
+        752, // Scrap
+    ];
 }
